@@ -1,0 +1,8 @@
+*.o
+obj
+*.py
+.sconf_temp
+.sconsign.dblite
+config.log
+out.jpg
+input.jpg
