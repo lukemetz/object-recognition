@@ -1,5 +1,6 @@
 #include "Classify.hpp"
 #include "feature.hpp"
+#include <cmath>
 
 const std::vector<Label> Classifier::labels = {Label::Nothing, Label::Ball};
 
@@ -57,5 +58,22 @@ void Classifier::calculate_probs(int smoothing)
 
 Label Classifier::classify(const Features& datum)
 {
-  return Label::Nothing;
+  double prior = 1;
+  map<Label, double> probs;
+  for (Label label : Classifier::labels) {
+    probs[label] = prior;
+    for (int x = 0; x < Features::width; ++x) {
+      for (int y = 0; y < Features::height; ++y) {
+        int bin = datum.pixels.at<unsigned char>(y, x);
+        probs[label] += log( feat_prob[label][tuple<int, int, int>(x, y, bin)] );
+      }
+    }
+  }
+  
+  auto max_iter = max_element(probs.begin(), probs.end(),
+    [](const pair<Label, double>& p1, const pair<Label, double>& p2) {
+      return p1.second < p2.second;
+    });
+
+  return max_iter->first;
 }
