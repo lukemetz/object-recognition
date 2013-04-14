@@ -5,6 +5,10 @@
 
 struct Features
 {
+  static const int width = 10;
+  static const int height = 10;
+  static const int bins = 8;
+
   cv::Mat pixels;
   Features(cv::Mat mat) {
     pixels = mat;
@@ -21,6 +25,5 @@ inline bool operator <(const Features a, const Features b) {
   }
   return false;
 }
-
 
 std::unique_ptr<Features> get_features(cv::Mat& src, int clip, int bins);
