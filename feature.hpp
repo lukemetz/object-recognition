@@ -11,6 +11,7 @@ struct Features
   static const int bins = 8;
 
   cv::Mat pixels;
+  cv::Mat b4_filter;
   Features(cv::Mat mat) {
     pixels = mat;
   };

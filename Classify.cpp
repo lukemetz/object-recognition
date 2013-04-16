@@ -67,10 +67,9 @@ Label Classifier::classify(const Features& datum)
       for (int y = 0; y < Features::height; ++y) {
         int bin = datum.pixels.at<unsigned char>(y, x);
         probs[label] += log( feat_prob[label][tuple<int, int, int>(x, y, bin)] );
-        cout << feat_prob[label][tuple<int, int, int>(x, y, bin)] << endl;
         if (feat_prob[label][tuple<int, int, int>(x, y, bin)] == 0) {
+          std::cout << "There was an error";
           std::cout << x << "," << y << "," << bin << label << endl;
-          //std::cout << x << "," << y << "," << bin << (label == Label::Nothing ? "Nothing" : "Something") << endl;
         }
       }
     }
@@ -80,6 +79,5 @@ Label Classifier::classify(const Features& datum)
     [](const pair<Label, double>& p1, const pair<Label, double>& p2) {
       return p1.second < p2.second;
     });
-  //cout << probs[Label::Nothing] << "," << probs[Label::Ball] << endl;
   return max_iter->first;
 }
