@@ -2,18 +2,18 @@
 
 #include <opencv2/opencv.hpp>
 #include <memory>
+#include <string>
 
 struct Features
 {
-  static const int width = 10;
-  static const int height = 10;
+  static const int width = 20;
+  static const int height = 20;
   static const int bins = 8;
 
   cv::Mat pixels;
   Features(cv::Mat mat) {
     pixels = mat;
   };
-
 };
 
 inline bool operator <(const Features a, const Features b) {
@@ -25,5 +25,7 @@ inline bool operator <(const Features a, const Features b) {
   }
   return false;
 }
-
-std::unique_ptr<Features> get_features(cv::Mat& src, int clip, int bins);
+//takes resized image in src, and returns features with clip
+std::unique_ptr<Features> get_features(const cv::Mat& src, int clip);
+//Gets the image at filename, resizes and calculates features
+std::unique_ptr<Features> get_features(std::string filename, int clip);

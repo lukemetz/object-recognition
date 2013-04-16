@@ -44,13 +44,20 @@ void clip_mag_and_bin(int amount, int bins, Mat& mag, Mat& dir) {
   }
 }
 
-unique_ptr<Features> get_features(Mat& src, int clip, int bins)
+unique_ptr<Features> get_features(const Mat& src, int clip)
 {
   Mat mag(src.size().height, src.size().width, CV_8UC1);
   Mat dir(src.size().height, src.size().width, CV_8UC1);
   gradiant(src, mag, dir);
-  clip_mag_and_bin(clip, bins, mag, dir);
+  clip_mag_and_bin(clip, Features::bins, mag, dir);
   unique_ptr<Features> features (new Features(dir));
   return features; 
 }
 
+unique_ptr<Features> get_features(string filename, int clip)
+{
+  Mat src = imread(filename.c_str());
+  Mat resized;
+  resize(src, resized, Size(Features::width, Features::height));
+  return get_features(resized, clip);
+}
