@@ -2,7 +2,7 @@ import os
 env = Environment()
 env['ENV']['TERM'] = os.environ['TERM']
 env['CXX'] = "clang++"
-env['CXXFLAGS'] = "-std=c++11"
+env['CXXFLAGS'] = "-std=c++11 -O3"
 
 def CheckPKGConfig(context, version):
      context.Message( 'Checking for pkg-config... ' )
