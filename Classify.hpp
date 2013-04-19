@@ -22,6 +22,7 @@ class Classifier {
     void calculate_probs(double smoothing);
 
     Label classify(const Features& datum);
+    std::tuple<Label, double> classify_detailed(const Features& datum);
     
     static const std::vector<Label> labels;
 };

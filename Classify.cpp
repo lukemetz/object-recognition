@@ -59,18 +59,20 @@ void Classifier::calculate_probs(double smoothing)
 
 Label Classifier::classify(const Features& datum)
 {
+  return get<0>(classify_detailed(datum));
+}
+
+tuple<Label, double> Classifier::classify_detailed(const Features& datum)
+{
   double prior = 1;
   map<Label, double> probs;
+
   for (Label label : Classifier::labels) {
     probs[label] = prior;
     for (int x = 0; x < Features::width; ++x) {
       for (int y = 0; y < Features::height; ++y) {
         int bin = datum.pixels.at<unsigned char>(y, x);
         probs[label] += log( feat_prob[label][tuple<int, int, int>(x, y, bin)] );
-        if (feat_prob[label][tuple<int, int, int>(x, y, bin)] == 0) {
-          std::cout << "There was an error";
-          std::cout << x << "," << y << "," << bin << label << endl;
-        }
       }
     }
   }
@@ -79,5 +81,7 @@ Label Classifier::classify(const Features& datum)
     [](const pair<Label, double>& p1, const pair<Label, double>& p2) {
       return p1.second < p2.second;
     });
-  return max_iter->first;
+
+  return tuple<Label, double> (max_iter->first, max_iter->second);
+
 }
