@@ -5,6 +5,7 @@
 const std::vector<Label> Classifier::labels = {"Nothing", "Ball"};
 
 using namespace std;
+using namespace cv;
 
 Classifier::Classifier()
 {
@@ -83,5 +84,37 @@ tuple<Label, double> Classifier::classify_detailed(const Features& datum)
     });
 
   return tuple<Label, double> (max_iter->first, max_iter->second);
+
+}
+
+void Classifier::locate_label(Label label, cv::Mat& src, cv::Mat& out, int clip)
+{
+  std::vector<int> pixels = {40, 50, 60, 70, 80, 100};
+  out = src.clone(); 
+  int width = src.size().width;
+  int height = src.size().height;
+  for (int pixel : pixels) {
+    for (int x = 0; x < width - pixel; x+=10) {
+      for (int y = 0; y  < height - pixel; y+=10) {
+        Mat nsrc = src(Rect(x, y, pixel, pixel));
+        auto features = get_features(nsrc, clip);
+        auto feat = classify_detailed(*features);
+        Label l = get<0>(feat);
+        double prob = get<1>(feat);
+
+        if (l == "Ball" && prob > -600) {
+          circle(out, Point(x+pixel/2, y+pixel/2), pixel/2, Scalar(100, 100, 100));
+        }
+        
+        if (l == "Ball" && prob > - 520) {
+          cout << x << ", " << y << "Size:" <<  pixel << "prob" << prob << endl;
+          //rectangle(transcribe, Point(x,y), Point(x+pixel, y+pixel), Scalar(128, 20, 30), 1);
+          int color = prob + 550; 
+          color = color - 255;
+          circle(out, Point(x+pixel/2, y+pixel/2), pixel/2, Scalar(0, 0, 0), 2);
+        } 
+      }
+    }
+  }
 
 }

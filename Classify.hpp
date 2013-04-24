@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <opencv2/imgproc/imgproc.hpp>
 
 struct Features;
 
@@ -25,6 +26,8 @@ class Classifier {
     std::tuple<Label, double> classify_detailed(const Features& datum);
     
     static const std::vector<Label> labels;
+
+    void locate_label(Label label, cv::Mat& src, cv::Mat& out, int clip);
 };
 
 
