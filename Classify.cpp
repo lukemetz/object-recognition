@@ -102,11 +102,11 @@ void Classifier::locate_label(Label label, cv::Mat& src, cv::Mat& out, int clip)
         Label l = get<0>(feat);
         double prob = get<1>(feat);
 
-        if (l == "Ball" && prob > -600) {
+        if (l == label && prob > -600) {
           circle(out, Point(x+pixel/2, y+pixel/2), pixel/2, Scalar(100, 100, 100));
         }
         
-        if (l == "Ball" && prob > - 520) {
+        if (l == label && prob > - 520) {
           cout << x << ", " << y << "Size:" <<  pixel << "prob" << prob << endl;
           //rectangle(transcribe, Point(x,y), Point(x+pixel, y+pixel), Scalar(128, 20, 30), 1);
           int color = prob + 550; 
@@ -116,5 +116,4 @@ void Classifier::locate_label(Label label, cv::Mat& src, cv::Mat& out, int clip)
       }
     }
   }
-
 }
